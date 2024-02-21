@@ -1,3 +1,15 @@
+import 'package:flutter/material.dart';
+import 'sheets_service.dart';
+
+class AddStudentPage extends StatefulWidget {
+  final String nfcCode;
+
+  const AddStudentPage({Key? key, required this.nfcCode}) : super(key: key);
+
+  @override
+  _AddStudentPageState createState() => _AddStudentPageState();
+}
+
 class _AddStudentPageState extends State<AddStudentPage> {
   final _formKey = GlobalKey<FormState>();
   late String _firstName, _lastName, _studentId;
@@ -7,6 +19,15 @@ class _AddStudentPageState extends State<AddStudentPage> {
   void initState() {
     super.initState();
     _sheetsService.init();
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      // Utilisez votre service SheetsService pour ajouter l'étudiant
+      await _sheetsService.addStudent(_firstName, _lastName, _studentId, widget.nfcCode);
+      Navigator.of(context).pop(); // Retour à l'écran précédent après l'ajout
+    }
   }
 
   @override
