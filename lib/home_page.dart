@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'students_list_page.dart';
 
 
 
@@ -63,6 +64,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -78,9 +80,19 @@ class _NfcReadPageState extends State<NfcReadPage> {
             ),
             SizedBox(height: 20),
             Text(_nfcData),
+            SizedBox(height: 20), // Ajouter un espace entre les boutons
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentsListPage()),
+                );
+              },
+              child: Text('Voir la liste des étudiants'),
+            ),
           ],
         ),
       ),
     );
   }
+
 }
