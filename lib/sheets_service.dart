@@ -40,6 +40,12 @@ class SheetsService {
     }
   }
 
+  Future<bool> checkIfStudentExists(String nfcCode) async {
+    if (_worksheet == null) await init();
+
+    final columnValues = await _worksheet!.values.column(3); // Fetch values of the fourth column
+    return columnValues.contains(nfcCode);
+  }
 
 
   Future<void> printSheetContent() async {
