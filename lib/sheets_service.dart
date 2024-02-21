@@ -40,4 +40,15 @@ class SheetsService {
     }
   }
 
+
+
+  Future<void> printSheetContent() async {
+    if (_worksheet == null) await init();
+
+    final cells = await _worksheet!.cells.allRows();
+
+    for (var row in cells) {
+      print(row.join(', '));
+    }
+  }
 }
