@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   void _startNfcSession() async {
     bool isAvailable = await NfcManager.instance.isAvailable();
+
     if (!isAvailable) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("NFC n'est pas disponible sur cet appareil"),
@@ -30,12 +31,10 @@ class _HomePageState extends State<HomePage> {
       final String nfcData = tag.data.toString();
       final bool studentExists = await _sheetsService.checkIfStudentExists(nfcData);
       if (!studentExists) {
-        // Si l'étudiant n'existe pas, naviguez vers la page d'ajout
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AddStudentPage(nfcCode: nfcData),
         ));
       } else {
-        // Affichez un message ou effectuez une action si l'étudiant existe déjà
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("L'étudiant existe déjà"),
         ));
@@ -51,17 +50,31 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Accueil'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            IconButton(
+              icon: Icon(Icons.nfc, size: 100, color: Colors.deepPurple),
               onPressed: _startNfcSession,
-              child: Text('Lire Tag NFC'),
+              tooltip: 'Lire Tag NFC',
+            ),
+            SizedBox(height: 20), // Espacement entre les éléments
+            Text(
+              'Appuyez sur l\'icône pour démarrer la session NFC',
+              style: TextStyle(fontSize: 16, color: Colors.deepPurple),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _startNfcSession,
+        tooltip: 'Lire Tag NFC',
+        child: Icon(Icons.nfc),
+        backgroundColor: Colors.deepPurple,
       ),
     );
   }
