@@ -48,6 +48,13 @@ class SheetsService {
   }
 
 
+  // Ajouter un nouvel étudiant à Google Sheets
+  Future<void> addStudent(String firstName, String lastName, String studentId, String nfcCode) async {
+    if (_worksheet == null) await init();
+
+    await _worksheet!.values.appendRow([firstName, lastName, studentId, nfcCode]);
+  }
+
   Future<void> printSheetContent() async {
     if (_worksheet == null) await init();
 
