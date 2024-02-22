@@ -1,7 +1,11 @@
 class Student {
+  final String firstName;
+  final String lastName;
   final String studentNumber;
-  final String arrivalSignature;
-  final String departureSignature;
 
-  Student({required this.studentNumber, required this.arrivalSignature, required this.departureSignature});
+  Student({
+    required this.firstName,
+    required this.lastName,
+    required this.studentNumber,
+  });
 }

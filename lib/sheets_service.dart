@@ -1,5 +1,7 @@
 import 'package:gsheets/gsheets.dart';
 
+import 'model/student.dart';
+
 
 //Keys
 const _credentials=r'''
@@ -63,5 +65,19 @@ class SheetsService {
     for (var row in cells) {
       print(row.join(', '));
     }
+  }
+
+  Future<List<Student>> getStudents() async {
+    if (_worksheet == null) await init();
+    // Ajustez le type ici pour correspondre à ce que allRows() retourne
+    final List<Map<String, String>>? rows = await _worksheet!.values.map.allRows();
+
+    if (rows == null) return []; // Gère le cas où rows est null
+
+    return rows.map((row) => Student(
+      firstName: row['firstName'] ?? '',
+      lastName: row['lastName'] ?? '',
+      studentNumber: row['studentId'] ?? '',
+    )).toList();
   }
 }

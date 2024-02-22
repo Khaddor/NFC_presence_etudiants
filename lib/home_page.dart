@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'sheets_service.dart';
 import 'add_student_page.dart';
+import 'students_list_page.dart';
+
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +22,6 @@ class _HomePageState extends State<HomePage> {
 
   void _startNfcSession() async {
     bool isAvailable = await NfcManager.instance.isAvailable();
-
     if (!isAvailable) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("NFC n'est pas disponible sur cet appareil"),
@@ -31,10 +33,12 @@ class _HomePageState extends State<HomePage> {
       final String nfcData = tag.data.toString();
       final bool studentExists = await _sheetsService.checkIfStudentExists(nfcData);
       if (!studentExists) {
+        // Si l'étudiant n'existe pas, naviguez vers la page d'ajout
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AddStudentPage(nfcCode: nfcData),
         ));
       } else {
+        // Affichez un message ou effectuez une action si l'étudiant existe déjà
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("L'étudiant existe déjà"),
         ));
@@ -61,6 +65,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: _startNfcSession,
               tooltip: 'Lire Tag NFC',
             ),
+
             SizedBox(height: 20), // Espacement entre les éléments
             Text(
               'Appuyez sur l\'icône pour démarrer la session NFC',
@@ -70,12 +75,36 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _startNfcSession,
-        tooltip: 'Lire Tag NFC',
-        child: Icon(Icons.nfc),
-        backgroundColor: Colors.deepPurple,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _startNfcSession,
+            tooltip: 'Lire Tag NFC',
+            child: Icon(Icons.nfc),
+            backgroundColor: Colors.deepPurple,
+            heroTag: null, // This is necessary to avoid hero tag conflicts
+          ),
+          SizedBox(height: 16), // Adjust the height as needed
+          FloatingActionButton(
+            onPressed: () {
+              // Add the functionality for the second button here
+              // For example, you can navigate to another page or perform a different action
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => StudentsListPage()),
+              );
+
+            },
+            tooltip: 'Second Button',
+            child: Icon(Icons.account_circle),
+            backgroundColor: Colors.deepPurple,
+            heroTag: null, // This is necessary to avoid hero tag conflicts
+          ),
+        ],
       ),
+
+
+
     );
   }
 }

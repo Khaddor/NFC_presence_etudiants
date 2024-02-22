@@ -1,41 +1,13 @@
 import 'package:flutter/material.dart';
-import 'model/student.dart'; 
-
+import 'package:nfc_presence_etudiants/sheets_service.dart';
+import 'model/student.dart';
 class StudentsListPage extends StatefulWidget {
   @override
   _StudentsListPageState createState() => _StudentsListPageState();
 }
 
 class _StudentsListPageState extends State<StudentsListPage> {
-  final List<Student> students = [
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:00", departureSignature: "12:00"),
-    Student(studentNumber: "RE000000", arrivalSignature: "08:15", departureSignature: ""),
-    Student(studentNumber: "RE000000", arrivalSignature: "", departureSignature: ""),
-  ];
+  final SheetsService _sheetsService = SheetsService();
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +16,34 @@ class _StudentsListPageState extends State<StudentsListPage> {
         title: Text('Liste des Étudiants'),
         backgroundColor: Colors.deepPurple,
       ),
-      body: ListView.builder(
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          final student = students[index];
-          return Card(
-            elevation: 4.0,
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.deepPurple,
-                child: Text(student.studentNumber.substring(0, 2), style: TextStyle(color: Colors.white)),
-              ),
-              title: Text('Numéro d\'étudiant: ${student.studentNumber}', style: TextStyle(color: Colors.deepPurple)),
-              subtitle: Text('Arrivée: ${student.arrivalSignature}, Départ: ${student.departureSignature}', style: TextStyle(color: Colors.grey[600])),
-              trailing: _buildTrailingIcon(student.arrivalSignature, student.departureSignature),
-            ),
+      body: FutureBuilder<List<Student>>(
+        future: _sheetsService.getStudents(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // Affiche un message si la liste des étudiants est vide
+            return Center(child: Text('Aucun étudiant trouvé'));
+          }
+          final students = snapshot.data!;
+          return ListView.builder(
+            itemCount: students.length, // La longueur de la liste n'est jamais nulle ici
+            itemBuilder: (context, index) {
+              final student = students[index];
+              return Card(
+                elevation: 4.0,
+                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.deepPurple,
+                    child: Text('${student.firstName[0]}${student.lastName[0]}', style: TextStyle(color: Colors.white)),
+                  ),
+                  title: Text('${student.firstName} ${student.lastName}', style: TextStyle(color: Colors.deepPurple)),
+                  subtitle: Text('Numéro d\'étudiant: ${student.studentNumber}', style: TextStyle(color: Colors.grey[600])),
+                ),
+              );
+            },
           );
         },
       ),
