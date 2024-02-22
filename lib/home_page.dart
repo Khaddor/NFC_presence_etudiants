@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
               );
 
             },
-            tooltip: 'Second Button',
+            tooltip: 'List of students',
             child: Icon(Icons.account_circle),
             backgroundColor: Colors.deepOrangeAccent,
             heroTag: null, // This is necessary to avoid hero tag conflicts
@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
               );
 
             },
-            tooltip: 'Second Button',
+            tooltip: 'Generate PDF',
             child: Icon(Icons.share),
             backgroundColor: Colors.deepOrangeAccent,
             heroTag: null, // This is necessary to avoid hero tag conflicts
