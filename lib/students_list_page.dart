@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_presence_etudiants/sheets_service.dart';
 import 'model/student.dart';
+
 class StudentsListPage extends StatefulWidget {
   @override
   _StudentsListPageState createState() => _StudentsListPageState();
@@ -14,7 +15,7 @@ class _StudentsListPageState extends State<StudentsListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Liste des Étudiants'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.deepOrangeAccent, // Updated color here
       ),
       body: FutureBuilder<List<Student>>(
         future: _sheetsService.getStudents(),
@@ -23,12 +24,11 @@ class _StudentsListPageState extends State<StudentsListPage> {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // Affiche un message si la liste des étudiants est vide
             return Center(child: Text('Aucun étudiant trouvé'));
           }
           final students = snapshot.data!;
           return ListView.builder(
-            itemCount: students.length, // La longueur de la liste n'est jamais nulle ici
+            itemCount: students.length,
             itemBuilder: (context, index) {
               final student = students[index];
               return Card(
@@ -36,10 +36,10 @@ class _StudentsListPageState extends State<StudentsListPage> {
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.deepOrangeAccent,
                     child: Text('${student.firstName[0]}${student.lastName[0]}', style: TextStyle(color: Colors.white)),
                   ),
-                  title: Text('${student.firstName} ${student.lastName}', style: TextStyle(color: Colors.deepPurple)),
+                  title: Text('${student.firstName} ${student.lastName}', style: TextStyle(color: Colors.deepOrangeAccent)),
                   subtitle: Text('Numéro d\'étudiant: ${student.studentNumber}', style: TextStyle(color: Colors.grey[600])),
                 ),
               );

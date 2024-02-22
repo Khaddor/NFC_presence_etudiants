@@ -44,6 +44,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Générer le PDF'),
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       body: Center(
         child: Column(
@@ -60,8 +61,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                       const Text('Cliquez pour télécharger le PDF'),
                       IconButton(
                         onPressed: _generatePdf,
-                        icon: const Icon(Icons.download_rounded,
-                            color: Colors.blue),
+                        icon: Icon(Icons.download_rounded, color: Colors.deepOrangeAccent),
                         tooltip: 'Télécharger',
                       ),
                     ],
@@ -69,13 +69,16 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                 ),
               ),
             if (_isGenerating && _progress < 1.0)
-              const Card(
+              Card(
                 elevation: 4,
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      CircularProgressIndicator(),
+                      CircularProgressIndicator(
+                        value: _progress,
+                        color: Colors.deepOrangeAccent,
+                      ),
                       SizedBox(height: 20),
                       Text('Génération du PDF en cours...'),
                     ],
@@ -89,23 +92,21 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      const Icon(Icons.check, size: 50, color: Colors.green),
-                      const SizedBox(height: 20),
-                      const Text('PDF généré avec succès!'),
+                      Icon(Icons.check, size: 50, color: Colors.green),
+                      SizedBox(height: 20),
+                      Text('PDF généré avec succès!'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.visibility,
-                                color: Colors.green),
+                            icon: Icon(Icons.visibility, color: Colors.deepOrangeAccent),
                             onPressed: () => OpenFile.open(_pdfPath!),
                             tooltip: 'Visualiser',
                           ),
                           IconButton(
-                            icon: const Icon(Icons.share, color: Colors.blue),
+                            icon: Icon(Icons.share, color: Colors.deepOrange),
                             onPressed: () {
-                              Share.shareXFiles([XFile(_pdfPath!)],
-                                  text: 'Voici le PDF généré.');
+                              Share.shareXFiles([XFile(_pdfPath!)], text: 'Voici le PDF généré.');
                             },
                             tooltip: 'Partager',
                           ),
