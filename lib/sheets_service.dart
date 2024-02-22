@@ -1,5 +1,11 @@
 import 'package:gsheets/gsheets.dart';
-
+import 'package:gsheets/gsheets.dart';
+import 'model/student.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'model/student.dart';
 
 
@@ -45,7 +51,7 @@ class SheetsService {
   Future<bool> checkIfStudentExists(String nfcCode) async {
     if (_worksheet == null) await init();
 
-    final columnValues = await _worksheet!.values.column(3); // Fetch values of the fourth column
+    final columnValues = await _worksheet!.values.column(4); // Fetch values of the fourth column
     return columnValues.contains(nfcCode);
   }
 
@@ -79,5 +85,30 @@ class SheetsService {
       lastName: row['lastName'] ?? '',
       studentNumber: row['studentId'] ?? '',
     )).toList();
+  }
+
+  static Stream<dynamic> generatePdfStream(SheetsService service) async* {
+    final pdf = pw.Document();
+    final students = await service.getStudents(); 
+
+    pdf.addPage(
+      pw.MultiPage(
+        build: (context) => [
+          pw.Table.fromTextArray(
+            data: students.map((student) => [student.firstName, student.lastName]).toList(),
+          ),
+        ],
+      ),
+    );
+
+    for (double progress = 0; progress <= 1; progress += 0.2) {
+      await Future.delayed(const Duration(milliseconds: 500)); 
+      yield progress; 
+    }
+
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/StudentsList.pdf");
+    await file.writeAsBytes(await pdf.save());
+    yield file.path; 
   }
 }

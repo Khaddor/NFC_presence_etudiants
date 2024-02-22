@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   nfc_manager: ^3.3.0
   gsheets:
+  open_file:
+  share_plus:
+  pdf:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
