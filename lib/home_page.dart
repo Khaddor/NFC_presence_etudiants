@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'generate_pdf_page.dart';
 import 'sheets_service.dart';
 import 'add_student_page.dart';
 import 'students_list_page.dart';
@@ -54,14 +55,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Accueil'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.nfc, size: 100, color: Colors.deepPurple),
+              icon: Icon(Icons.nfc, size: 100, color: Colors.deepOrangeAccent),
               onPressed: _startNfcSession,
               tooltip: 'Lire Tag NFC',
             ),
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20), // Espacement entre les éléments
             Text(
               'Appuyez sur l\'icône pour démarrer la session NFC',
-              style: TextStyle(fontSize: 16, color: Colors.deepPurple),
+              style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
               textAlign: TextAlign.center,
             ),
           ],
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: _startNfcSession,
             tooltip: 'Lire Tag NFC',
             child: Icon(Icons.nfc),
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: Colors.deepOrangeAccent,
             heroTag: null, // This is necessary to avoid hero tag conflicts
           ),
           SizedBox(height: 16), // Adjust the height as needed
@@ -97,9 +98,25 @@ class _HomePageState extends State<HomePage> {
             },
             tooltip: 'Second Button',
             child: Icon(Icons.account_circle),
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: Colors.deepOrangeAccent,
             heroTag: null, // This is necessary to avoid hero tag conflicts
           ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              // Add the functionality for the second button here
+              // For example, you can navigate to another page or perform a different action
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => GeneratePdfPage()),
+              );
+
+            },
+            tooltip: 'Second Button',
+            child: Icon(Icons.share),
+            backgroundColor: Colors.deepOrangeAccent,
+            heroTag: null, // This is necessary to avoid hero tag conflicts
+          ),
+
         ],
       ),
 
